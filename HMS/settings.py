@@ -16,8 +16,8 @@ import django_heroku
 import dj_database_url
 
 env = environ.Env(
-# set casting, default value
-DEBUG=(bool, False)
+    # set casting, default value
+    DEBUG=(bool, False)
 )
 
 environ.Env.read_env()
@@ -55,9 +55,14 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
 
+    # Add-ons
+    'crispy_forms',
+
     # my_apps
     'hotel',
     'hotel.booking_functions',
+
+
 ]
 
 MIDDLEWARE = [
@@ -86,7 +91,7 @@ ROOT_URLCONF = 'HMS.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['./templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -104,7 +109,7 @@ WSGI_APPLICATION = 'HMS.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
-if DEBUG==True:
+if DEBUG == True:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
@@ -149,15 +154,25 @@ USE_TZ = True
 
 SITE_ID = 1
 
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+CRISPY_FAIL_SILENTLY = not DEBUG
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
 STATIC_ROOT = 'static/'
-
+STATICFILES_DIRS = ['./static']
+# Django allauth settings
 LOGIN_REDIRECT_URL = '/'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_AUTHENTICATION_METHOD = "email"
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_USERNAME_REQUIRED = False
 
+
+# Email Config
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 

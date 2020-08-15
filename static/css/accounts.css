@@ -1,0 +1,61 @@
+/* Fonts */
+@import url("https://fonts.googleapis.com/css2?family=Charm:wght@700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap");
+
+/* Root CSS */
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+/* Colors */
+:root {
+  --primary-text-color: #000;
+  --secondary-text-color: #444;
+  --heading-font: "Montserrat";
+  --subheading-font: "Opensans";
+}
+
+body {
+  background-color: #f9f9f9;
+  display: flex;
+  flex-flow: column wrap;
+  align-items: center;
+  color: var(--secondary-text-color);
+  font-family: "Montserrat" !important;
+}
+#logo {
+  font-size: 1.3rem;
+}
+h1 {
+  font-family: var(--heading-font);
+  color: var(--primary-text-color) !important;
+}
+.container {
+  max-width: 25rem !important;
+  text-align: center;
+}
+
+a {
+  font-size: 1rem !important;
+  text-decoration: none !important;
+  color: #444 !important;
+}
+
+button.btn-primary {
+  background-color: #444 !important;
+  outline: none !important;
+  border: none !important;
+}
+
+button.btn-primary:hover {
+  background-color: #2949ff !important;
+  outline: 1px solid #444 !important;
+  cursor: pointer;
+  outline: none !important;
+  color: #f9f9f9 !important;
+}
+a:hover {
+  color: #2949ff !important;
+}
