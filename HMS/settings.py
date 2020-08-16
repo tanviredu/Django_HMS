@@ -55,9 +55,6 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
 
-    # Add-ons
-    'crispy_forms',
-
     # my_apps
     'hotel',
     'hotel.booking_functions',
@@ -154,8 +151,6 @@ USE_TZ = True
 
 SITE_ID = 1
 
-CRISPY_TEMPLATE_PACK = 'bootstrap4'
-CRISPY_FAIL_SILENTLY = not DEBUG
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
@@ -174,6 +169,12 @@ ACCOUNT_USERNAME_REQUIRED = False
 
 # Email Config
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+
+# STRIPE SETTINGS
+STRIPE_PUBLIC_KEY = env.str("STRIPE_PUBLIC_KEY")
+STRIPE_PRIVATE_KEY = env.str("STRIPE_PRIVATE_KEY")
+STRIPE_PAYMENT_WEBHOOK_SECRET = env.str('STRIPE_PAYMENT_WEBHOOK_SECRET')
 
 
 django_heroku.settings(locals())

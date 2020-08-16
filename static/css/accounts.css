@@ -59,3 +59,8 @@ button.btn-primary:hover {
 a:hover {
   color: #2949ff !important;
 }
+
+.btn.btn-warning {
+  background-color: #d63a5c !important;
+  color: #f9f9f9 !important;
+}
