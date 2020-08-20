@@ -1,0 +1,10 @@
+{% load socialaccount %}
+<!-- templates/registration/login.html -->
+<h2>Login</h2>
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <h1>My Google Login Project</h1>
+  <a href="{% provider_login_url 'google' %}">Signup with Google</a>
+  <button type="submit">Login</button>
+</form>
