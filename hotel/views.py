@@ -36,8 +36,8 @@ def RoomListView(request):
     room_categories = dict(room.ROOM_CATEGORIES)
     room_values = room_categories.values()
     room_list = []
-    print(stripe.apikey)
-    print(stripe.Balance.retrieve())
+    # print(stripe.apikey)
+    # print(stripe.Balance.retrieve())
 
     for room_category in room_categories:
         room = room_categories.get(room_category)
