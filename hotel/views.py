@@ -7,7 +7,8 @@ from .forms import AvailabilityForm
 from hotel.booking_functions.availability import check_availability
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
-
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import get_user_model
 import os
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
@@ -157,17 +158,31 @@ class CancelBookingView(DeleteView):
 
 #         return render(request, 'payment.html', context)
 
-
+@login_required
 def payment(request):
+    # CreateUser(CustomUser)
+    user, _ = get_user_model().objects.get_or_create(
+        email=request.user.email,
+    )
 
-    print(request)
+    # Fetch or Create stripe customer
+    if user.stripe_customer_id != '' and user.stripe_customer_id is not None:
+        stripe_customer = stripe.Customer.retrieve(user.stripe_customer_id)
+    else:
+        stripe_customer = stripe.Customer.create(
+            email=request.user.email,
+        )
+        # Attach Customer Id to Custom User
+        user.stripe_customer_id = stripe_customer.id
+        user.save()
+    # Payment intent
     intent = stripe.PaymentIntent.create(
         amount=786,
         currency='inr',
         payment_method_types=['card'],
         metadata={'integration_check': 'accept_a_payment'},
+        customer=stripe_customer,
     )
-    # print(intent)
     return render(request, 'payment_view.html', {"client_secret": intent['client_secret']})
 
 
