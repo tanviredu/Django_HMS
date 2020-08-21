@@ -23,12 +23,17 @@ class Room(models.Model):
 
 
 class Booking(models.Model):
+    PAYMENT_STATUSES = (
+        ('PEN', 'PENDING'),
+        ('PAI', 'PAID'),
+    )
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                              on_delete=models.CASCADE)
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
-
     check_in = models.DateTimeField()
     check_out = models.DateTimeField()
+    payment_status = models.CharField(
+        max_length=3, choices=PAYMENT_STATUSES, default='PENDING')
 
     def __str__(self):
         return f'From = {self.check_in.strftime("%d-%b-%Y %H:%M")} To = {self.check_out.strftime("%d-%b-%Y %H:%M")}'

@@ -209,14 +209,14 @@ def paymentWebhook(request):
         if event_dict['type'] == "payment_intent.succeeded":
             intent = event_dict['data']['object']
             print("Payment Succeeded: ", intent['id'])
-            return redirect(reverse('success'))
+            return redirect(reverse('hotel:success'))
             # Fulfill the customer's purchase
         elif event_dict['type'] == "payment_intent.payment_failed":
             intent = event_dict['data']['object']
             error_message = intent['last_payment_error']['message'] or None
             print("Payment Failed: ", intent['id'], error_message)
             # Notify the customer that payment failed
-            return redirect(reverse('failure'))
+            return redirect(reverse('hotel:failure'))
 
 
 def successMsg(request, *args, **kwargs):

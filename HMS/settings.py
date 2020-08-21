@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     'hotel',
     'hotel.booking_functions',
     'users',
+    'stripe',
 
 
 ]
