@@ -204,7 +204,7 @@ def paymentWebhook(request):
         payment_intent = event.data.object  # contains a stripe.PaymentIntent
         # Then define and call a method to handle the successful payment intent.
         # handle_payment_intent_succeeded(payment_intent)
-        successMsg(amount=payment_intent.amount)
+        successMsg(request, payment_intent.amount)
     # elif event.type == 'payment_method.attached':
     #     payment_method = event.data.object  # contains a stripe.PaymentMethod
         # Then define and call a method to handle the successful attachment of a PaymentMethod.
