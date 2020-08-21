@@ -33,7 +33,7 @@ class Booking(models.Model):
     check_in = models.DateTimeField()
     check_out = models.DateTimeField()
     payment_status = models.CharField(
-        max_length=3, choices=PAYMENT_STATUSES, default='PENDING')
+        max_length=3, choices=PAYMENT_STATUSES, default='PEN')
 
     def __str__(self):
         return f'From = {self.check_in.strftime("%d-%b-%Y %H:%M")} To = {self.check_out.strftime("%d-%b-%Y %H:%M")}'
