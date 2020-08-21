@@ -42,6 +42,7 @@ AUTH_USER_MODEL = "users.CustomUser"
 # Application definition
 
 INSTALLED_APPS = [
+    'users',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -61,7 +62,6 @@ INSTALLED_APPS = [
     # my_apps
     'hotel',
     'hotel.booking_functions',
-    'users',
     'stripe',
 
 
