@@ -1,4 +1,4 @@
-from django.shortcuts import render, HttpResponse, redirect
+from django.shortcuts import render, HttpResponse, redirect, HttpResponseRedirect
 from django.views.generic import ListView, FormView, View, DeleteView
 from django.urls import reverse, reverse_lazy
 from django.http import JsonResponse
@@ -188,39 +188,69 @@ def payment(request):
 
 @csrf_exempt
 def paymentWebhook(request):
-    if request.method == "POST":
-        wh_sec = settings.STRIPE_PAYMENT_WEBHOOK_SECRET
-        payload = request.body
-        sig_header = request.headers['Stripe-Signature']
-        event = None
+    payload = request.body
+    event = None
 
-        try:
-            event = stripe.Webhook.construct_event(
-                payload, sig_header, wh_sec
-            )
-        except ValueError as e:
-            # invalid payload
-            return "Invalid payload", 400
-        except stripe.error.SignatureVerificationError as e:
-            # invalid signature
-            return "Invalid signature", 400
+    try:
+        event = stripe.Event.construct_from(
+            json.loads(payload), stripe.api_key
+        )
+    except ValueError as e:
+        # Invalid payload
+        return HttpResponse(status=400)
 
-        event_dict = event.to_dict()
-        if event_dict['type'] == "payment_intent.succeeded":
-            intent = event_dict['data']['object']
-            print("Payment Succeeded: ", intent['id'])
-            return redirect(reverse('hotel:success'))
-            # Fulfill the customer's purchase
-        elif event_dict['type'] == "payment_intent.payment_failed":
-            intent = event_dict['data']['object']
-            error_message = intent['last_payment_error']['message'] or None
-            print("Payment Failed: ", intent['id'], error_message)
-            # Notify the customer that payment failed
-            return redirect(reverse('hotel:failure'))
+    # Handle the event
+    if event.type == 'payment_intent.succeeded':
+        payment_intent = event.data.object  # contains a stripe.PaymentIntent
+        # Then define and call a method to handle the successful payment intent.
+        # handle_payment_intent_succeeded(payment_intent)
+        successMsg(amount=payment_intent.amount)
+    # elif event.type == 'payment_method.attached':
+    #     payment_method = event.data.object  # contains a stripe.PaymentMethod
+        # Then define and call a method to handle the successful attachment of a PaymentMethod.
+        # handle_payment_method_attached(payment_method)
+    # ... handle other event types
+    else:
+        # Unexpected event type
+        return HttpResponse(status=400)
+
+    return HttpResponse(status=200)
+
+# @csrf_exempt
+# def paymentWebhook(request):
+#     if request.method == "POST":
+#         wh_sec = settings.STRIPE_PAYMENT_WEBHOOK_SECRET
+#         payload = request.body
+#         sig_header = request.headers['Stripe-Signature']
+#         event = None
+
+#         try:
+#             event = stripe.Webhook.construct_event(
+#                 payload, sig_header, wh_sec
+#             )
+#         except ValueError as e:
+#             # invalid payload
+#             return HttpResponse("Invalid payload", 400)
+#         except stripe.error.SignatureVerificationError as e:
+#             # invalid signature
+#             return HttpResponse("Invalid signature", 400)
+
+#         event_dict = event.to_dict()
+#         if event_dict['type'] == "payment_intent.succeeded":
+#             intent = event_dict['data']['object']
+#             print("Payment Succeeded: ", intent['id'])
+#             return HttpResponse(status=200)
+#             # Fulfill the customer's purchase
+#         elif event_dict['type'] == "payment_intent.payment_failed":
+#             intent = event_dict['data']['object']
+#             error_message = intent['last_payment_error']['message'] or None
+#             print("Payment Failed: ", intent['id'], error_message)
+#             # Notify the customer that payment failed
+#             return HttpResponse(status=400)
 
 
-def successMsg(request, *args, **kwargs):
-    return render(request, 'success.html', {"amount": amount, "charge": charge})
+def successMsg(request, amount):
+    return render(request, 'success.html', {"amount": amount})
 
 
 def failure(request, *args, **kwargs):
